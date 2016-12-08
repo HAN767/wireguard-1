@@ -1,0 +1,15 @@
+[Unit]
+Description=WireGuard Server %I
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/etc/wireguard/%i.address
+ExecStart=/bin/ip link add dev %i type wireguard
+ExecStart=/bin/ip address add $ADDRESS dev %i
+ExecStart=/usr/bin/wg setconf %i /etc/wireguard/%i.conf
+ExecStart=/bin/ip link set up dev %i
+ExecStop=/bin/ip link del dev %i
+
+[Install]
+WantedBy=multi-user.target
